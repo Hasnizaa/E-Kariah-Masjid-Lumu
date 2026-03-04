@@ -137,8 +137,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem("ekariah-lang", newLang);
   };
 
-  const t = (key: TranslationKey, vars?: Record<string, string>) => {
-    let text = translations[key]?.[lang] || key;
+  const t = (key: TranslationKey, vars?: Record<string, string>): string => {
+    let text: string = translations[key]?.[lang] || key;
     if (vars) {
       Object.entries(vars).forEach(([k, v]) => {
         text = text.replace(`{${k}}`, v);
