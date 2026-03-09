@@ -79,6 +79,10 @@ const translations = {
   "auth.signupSuccess": { bm: "Pendaftaran berjaya! Sila log masuk.", en: "Registration successful! Please login." },
   "auth.loginSuccess": { bm: "Log masuk berjaya!", en: "Login successful!" },
   "auth.loginFail": { bm: "Emel atau kata laluan salah.", en: "Incorrect email or password." },
+  "auth.sendOtp": { bm: "Hantar OTP", en: "Send OTP" },
+  "auth.verifyOtp": { bm: "Sahkan OTP", en: "Verify OTP" },
+  "auth.otpSent": { bm: "OTP telah dihantar ke", en: "OTP has been sent to" },
+  "auth.back": { bm: "Kembali", en: "Back" },
 
   // Feedback
   "feedback.title": { bm: "Maklum Balas", en: "Feedback" },
