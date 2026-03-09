@@ -4,68 +4,55 @@ import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 interface UserProfile {
   name: string;
-  email: string;
   phone: string;
   penempatan: string;
 }
 
 interface AuthContextType {
   user: UserProfile | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  signup: (userData: UserProfile & { password: string }) => Promise<boolean>;
+  sendOtp: (phone: string) => Promise<void>;
+  verifyOtp: (phone: string, token: string) => Promise<boolean>;
+  signupWithPhone: (data: { name: string; phone: string; penempatan: string }) => Promise<void>;
   logout: () => void;
-  totalUsers: number;
   loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  login: async () => false,
-  signup: async () => false,
+  sendOtp: async () => {},
+  verifyOtp: async () => false,
+  signupWithPhone: async () => {},
   logout: () => {},
-  totalUsers: 0,
   loading: true,
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (supaUser: SupabaseUser) => {
     const { data } = await supabase
       .from("users")
-      .select("full_name, email, phone, penempatan")
+      .select("full_name, phone, penempatan")
       .eq("id", supaUser.id)
-      .single();
+      .maybeSingle();
 
     if (data) {
       setUser({
         name: data.full_name,
-        email: data.email,
         phone: data.phone || "",
         penempatan: data.penempatan || "",
       });
     } else {
-      // Fallback if no profile row yet
       setUser({
-        name: supaUser.email?.split("@")[0] || "User",
-        email: supaUser.email || "",
-        phone: "",
+        name: supaUser.phone || "User",
+        phone: supaUser.phone || "",
         penempatan: "",
       });
     }
   };
 
-  const fetchTotalUsers = async () => {
-    const { count } = await supabase
-      .from("users")
-      .select("*", { count: "exact", head: true });
-    setTotalUsers(count || 0);
-  };
-
   useEffect(() => {
-    // Listen for auth changes FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         if (session?.user) {
@@ -77,7 +64,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
 
-    // Then check existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         fetchProfile(session.user);
@@ -85,38 +71,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     });
 
-    fetchTotalUsers();
-
     return () => subscription.unsubscribe();
   }, []);
 
-  const signup = async (userData: UserProfile & { password: string }): Promise<boolean> => {
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: userData.email,
-      password: userData.password,
-    });
+  const sendOtp = async (phone: string) => {
+    const { error } = await supabase.auth.signInWithOtp({ phone });
+    if (error) throw new Error(error.message);
+  };
 
-    if (authError) throw new Error(authError.message);
-    if (!authData.user) throw new Error("Signup failed");
-
-    const { error: insertError } = await supabase.from("users").insert([{
-      id: authData.user.id,
-      full_name: userData.name,
-      email: userData.email,
-      phone: userData.phone,
-      penempatan: userData.penempatan,
-    }]);
-
-    if (insertError) throw new Error(insertError.message);
-
-    fetchTotalUsers();
+  const verifyOtp = async (phone: string, token: string): Promise<boolean> => {
+    const { error } = await supabase.auth.verifyOtp({ phone, token, type: "sms" });
+    if (error) throw new Error(error.message);
     return true;
   };
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const signupWithPhone = async (data: { name: string; phone: string; penempatan: string }) => {
+    // First send OTP — the actual profile insert happens after OTP verification
+    const { error } = await supabase.auth.signInWithOtp({ phone: data.phone });
     if (error) throw new Error(error.message);
-    return true;
   };
 
   const logout = async () => {
@@ -125,7 +97,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, totalUsers, loading }}>
+    <AuthContext.Provider value={{ user, sendOtp, verifyOtp, signupWithPhone, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
