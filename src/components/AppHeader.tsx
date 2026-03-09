@@ -1,6 +1,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
 import { useLanguage } from "@/hooks/use-language";
+import Logo from "@/components/Logo";
 
 interface AppHeaderProps {
   themeHook?: ReturnType<typeof useTheme>;
@@ -15,9 +16,7 @@ const AppHeader = ({ themeHook }: AppHeaderProps) => {
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-lg">
-            🕌
-          </div>
+          <Logo className="text-primary h-8 w-auto" />
           <div>
             <h1 className="text-base font-bold leading-tight">e-Kariah Raja Lumu</h1>
             <p className="text-xs text-muted-foreground">Kuala Selangor</p>
