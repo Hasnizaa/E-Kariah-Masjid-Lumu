@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/hooks/use-auth";
 import AppLayout from "@/components/AppLayout";
+import PrayerTimes from "../components/PrayerTimes";
+
+const zone = "SGR02";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -36,15 +39,8 @@ const HomePage = () => {
       {/* Prayer Times */}
       <section className="mb-6">
         <h3 className="mb-3 text-lg font-bold">{t("home.prayerTitle")}</h3>
-        <div className="rounded-xl border border-border bg-card p-4">
-          <div className="grid grid-cols-5 gap-2 text-center">
-            {prayerTimes.map((p) => (
-              <div key={p.name} className="flex flex-col items-center gap-1">
-                <span className="text-xs font-semibold text-muted-foreground">{p.name}</span>
-                <span className="text-sm font-bold">{p.time}</span>
-              </div>
-            ))}
-          </div>
+          <div className="rounded-xl border border-border bg-card p-4">
+          <PrayerTimes zoneCode="SGR02" />
         </div>
       </section>
 
