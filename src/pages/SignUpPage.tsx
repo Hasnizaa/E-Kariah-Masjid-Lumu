@@ -11,6 +11,7 @@ const SignUpPage = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
 
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
