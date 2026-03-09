@@ -1,16 +1,39 @@
 const Logo = ({ className = "" }: { className?: string }) => (
   <svg
-    width="180"
-    height="80"
-    viewBox="0 0 1640 700"
+    width="40"
+    height="40"
+    viewBox="0 0 40 40"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
-    aria-label="Kracked Devs logo"
+    aria-label="e-Kariah logo"
   >
+    {/* Mosque dome */}
     <path
-      d="M550,250L550,200L590,200L590,210L560,210L560,250L550,250ZM500,250L550,250L550,260L500,260L500,250ZM650,250L650,330L640,330L640,250L650,250ZM590,200L590,110L690,110L690,250L650,250L650,240L680,240L680,120L600,120L600,200L590,200Z"
+      d="M20 4C14 4 9 10 9 16V28H31V16C31 10 26 4 20 4Z"
       fill="currentColor"
+      opacity="0.15"
     />
+    <path
+      d="M20 2L20 6M20 6C14.5 6 10 11 10 17V30H30V17C30 11 25.5 6 20 6Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+      strokeLinecap="round"
+    />
+    {/* Crescent */}
+    <circle cx="20" cy="4" r="2" fill="currentColor" />
+    {/* Door */}
+    <path
+      d="M17 30V24C17 22.3 18.3 21 20 21C21.7 21 23 22.3 23 24V30"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      fill="none"
+    />
+    {/* Base */}
+    <line x1="6" y1="30" x2="34" y2="30" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    {/* Minarets */}
+    <rect x="7" y="20" width="3" height="10" rx="1" fill="currentColor" opacity="0.3" />
+    <rect x="30" y="20" width="3" height="10" rx="1" fill="currentColor" opacity="0.3" />
   </svg>
 );
 

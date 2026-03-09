@@ -1,17 +1,15 @@
-import { prayerTimes, events, announcements } from "@/data/mock-data";
-import { Calendar, Clock, ChevronRight, Users } from "lucide-react";
+import { events, announcements } from "@/data/mock-data";
+import { Calendar, Clock, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/hooks/use-auth";
 import AppLayout from "@/components/AppLayout";
 import PrayerTimes from "../components/PrayerTimes";
 
-const zone = "SGR02";
-
 const HomePage = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const { user, totalUsers } = useAuth();
+  const { user } = useAuth();
 
   return (
     <AppLayout>
@@ -23,23 +21,10 @@ const HomePage = () => {
         <p className="mt-1 text-muted-foreground">{t("home.welcomeDesc")}</p>
       </section>
 
-      {/* Total Users */}
-      <section className="mb-6">
-        <div className="rounded-xl border border-border bg-primary/10 p-4 flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-accent-foreground">
-            <Users size={22} />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-muted-foreground">{t("home.totalRegistered")}</p>
-            <p className="text-2xl font-bold">{totalUsers}</p>
-          </div>
-        </div>
-      </section>
-
       {/* Prayer Times */}
       <section className="mb-6">
         <h3 className="mb-3 text-lg font-bold">{t("home.prayerTitle")}</h3>
-          <div className="rounded-xl border border-border bg-card p-4">
+        <div className="rounded-xl border border-border bg-card p-4">
           <PrayerTimes zoneCode="SGR02" />
         </div>
       </section>

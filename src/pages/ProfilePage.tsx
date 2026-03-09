@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTheme } from "@/hooks/use-theme";
 import { useLanguage } from "@/hooks/use-language";
 import { useAuth } from "@/hooks/use-auth";
-import { Copy, Moon, Sun, LogOut, Users } from "lucide-react";
+import { Copy, Moon, Sun, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import FeedbackModal from "@/components/FeedbackModal";
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 const ProfilePage = () => {
   const { isDark, toggle } = useTheme();
   const { t } = useLanguage();
-  const { user, logout, totalUsers } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showFeedback, setShowFeedback] = useState(false);
 
@@ -54,15 +54,6 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Total Users */}
-        <div className="mt-4 rounded-xl border border-border bg-card p-4 flex items-center gap-4">
-          <Users size={20} className="text-muted-foreground" />
-          <div>
-            <p className="text-sm font-semibold">{t("profile.totalUsers")}</p>
-            <p className="text-xl font-bold">{totalUsers}</p>
-          </div>
-        </div>
-
         {/* Dark Mode */}
         <div className="mt-4 rounded-xl border border-border bg-card p-4">
           <div className="flex items-center justify-between">
@@ -102,22 +93,9 @@ const ProfilePage = () => {
         </div>
         <div className="mt-4 space-y-3 text-sm">
           <div>
-            <span className="font-semibold">{t("profile.email")}:</span>
-            <span className="ml-2 text-muted-foreground">{user.email}</span>
-          </div>
-          <div>
             <span className="font-semibold">{t("profile.phone")}:</span>
             <span className="ml-2 text-muted-foreground">{user.phone}</span>
           </div>
-        </div>
-      </div>
-
-      {/* Total Users */}
-      <div className="rounded-xl border border-border bg-card p-4 mb-4 flex items-center gap-4">
-        <Users size={20} className="text-muted-foreground" />
-        <div>
-          <p className="text-sm font-semibold">{t("profile.totalUsers")}</p>
-          <p className="text-xl font-bold">{totalUsers}</p>
         </div>
       </div>
 
