@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { useLanguage } from "@/hooks/use-language";
 import AppLayout from "@/components/AppLayout";
+import Logo from "@/components/Logo";
 import { toast } from "sonner";
 
 const LoginPage = () => {
@@ -11,20 +12,28 @@ const LoginPage = () => {
   const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(email, password);
-    if (success) {
+    if (loading) return;
+    setLoading(true);
+    try {
+      await login(email, password);
       toast.success(t("auth.loginSuccess"));
       navigate("/");
-    } else {
-      toast.error(t("auth.loginFail"));
+    } catch (err: any) {
+      toast.error(err.message || t("auth.loginFail"));
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <AppLayout>
+      <div className="flex justify-center mb-6">
+        <Logo className="text-primary" />
+      </div>
       <h2 className="mb-6 text-2xl font-bold">{t("auth.loginTitle")}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -49,9 +58,10 @@ const LoginPage = () => {
         </div>
         <button
           type="submit"
-          className="w-full rounded-xl bg-primary py-4 text-base font-bold text-primary-foreground transition-colors hover:bg-primary/90"
+          disabled={loading}
+          className="w-full rounded-xl bg-primary py-4 text-base font-bold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
         >
-          {t("auth.loginBtn")}
+          {loading ? "..." : t("auth.loginBtn")}
         </button>
       </form>
       <p className="mt-6 text-center text-sm text-muted-foreground">
