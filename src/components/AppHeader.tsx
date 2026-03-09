@@ -1,6 +1,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
 import { useLanguage } from "@/hooks/use-language";
+import Logo from "@/components/Logo";
 
 interface AppHeaderProps {
   themeHook?: ReturnType<typeof useTheme>;
